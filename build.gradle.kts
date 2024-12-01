@@ -13,3 +13,8 @@ tasks {
         gradleVersion = "8.11.1"
     }
 }
+
+dependencies {
+    implementation("com.github.jsoberg:Kotlin-AoC-API:1.0")
+    testImplementation("org.slf4j:slf4j-simple:2.0.16")
+}
