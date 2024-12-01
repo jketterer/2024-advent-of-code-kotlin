@@ -1,21 +1,49 @@
+import kotlin.math.abs
+import Part1.calculateTotalDistance
+import Part2.calculateSimilarityScore
+import kotlin.math.absoluteValue
+
+// https://adventofcode.com/2024/day/1
 fun main() {
-    fun part1(input: List<String>): Int {
-        return input.size
+    val input = readInput(2024, 1)
+    println("Part 1: ${calculateTotalDistance(input)}")
+    println("Part 2: ${calculateSimilarityScore(input)}")
+}
+
+private object Part1 {
+    fun calculateTotalDistance(input: List<String>): Int {
+        val (left, right) = buildLists(input)
+        val sortedLeft = left.sorted()
+        val sortedRight = right.sorted()
+        return sortedLeft.mapIndexed { i, num ->
+            (num - sortedRight[i]).absoluteValue
+        }.sum()
+    }
+}
+
+private object Part2 {
+    fun calculateSimilarityScore(input: List<String>): Int {
+        val (left, right) = buildLists(input)
+        val occurrencesMap: MutableMap<Int, Int> = mutableMapOf()
+        return left.sumOf { num ->
+            val occurrences = occurrencesMap.computeIfAbsent(num) { i -> right.count { it == i } }
+            occurrences * num
+        }
+    }
+}
+
+private fun buildLists(input: List<String>): Pair<List<Int>, List<Int>> {
+    val firsts: MutableList<Int> = mutableListOf()
+    val seconds: MutableList<Int> = mutableListOf()
+
+    input.forEachIndexed { i, s ->
+        val pair = s.split("   ")
+        if (pair.size > 2) {
+            throw IllegalArgumentException("Line ${i + 1} contains more than two numbers: $pair")
+        }
+        firsts.add(pair.first().toInt())
+        seconds.add(pair.last().toInt())
     }
 
-    fun part2(input: List<String>): Int {
-        return input.size
-    }
-
-    // Test if implementation meets criteria from the description, like:
-    check(part1(listOf("test_input")) == 1)
-
-    // Or read a large test input from the `src/Day01_test.txt` file:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
-
-    // Read the input from the `src/Day01.txt` file.
-    val input = readInput("Day01")
-    part1(input).println()
-    part2(input).println()
+    return Pair(firsts.toList(), seconds.toList())
 }
