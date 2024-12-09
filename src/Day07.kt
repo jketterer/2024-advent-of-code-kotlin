@@ -1,6 +1,6 @@
 import kotlin.math.pow
 
-// https://adventofcode.com/2024/day/6
+// https://adventofcode.com/2024/day/7
 fun main() {
     val input = readInput(2024, 7)
     println("Part 1: ${Day07.Part1.getTotalCalibrationResult(input)}")
